@@ -124,7 +124,8 @@ namespace PnP.Core.Model.SharePoint
 
                 // If this list we're adding items to was not fetched from the server than throw an error
                 string serverRelativeUrl = null;
-                if (string.IsNullOrEmpty(parentListTitle) || string.IsNullOrEmpty(parentListUri) || !parentList.IsPropertyAvailable(p => p.TemplateType))
+                (bool isList, _, _) = ListMetaDataMapper.DetectListType(parentList.TemplateType);
+                if (isList || string.IsNullOrEmpty(parentListTitle) || string.IsNullOrEmpty(parentListUri) || !parentList.IsPropertyAvailable(p => p.TemplateType))
                 {
                     // Fall back to loading the RootFolder property if we can't determine the list name
                     await parentList.EnsurePropertiesAsync(p => p.RootFolder).ConfigureAwait(false);
